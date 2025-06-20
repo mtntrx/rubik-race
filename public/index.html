@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Rubik's Race</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+    <div id="app">
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Connecting to game...</p>
+        </div>
+
+        <div id="game-container" class="game-container hidden">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="player-stats">
+                    <div class="moves-counter">
+                        <span id="player1-moves">P1: 0 moves</span>
+                        <span class="separator">|</span>
+                        <span id="player2-moves">P2: 0 moves</span>
+                    </div>
+                    <div class="wins-counter">
+                        <span id="player1-wins">P1: 0 wins</span>
+                        <span class="separator">|</span>
+                        <span id="player2-wins">P2: 0 wins</span>
+                    </div>
+                </div>
+                <div id="connection-status" class="connection-status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+            </div>
+
+            <!-- Scrambler Pattern -->
+            <div class="scrambler-section">
+                <h3>Target Pattern</h3>
+                <div id="scrambler-grid" class="scrambler-grid">
+                    <!-- 3x3 grid will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Game Board -->
+            <div class="game-section">
+                <h3>Your Puzzle</h3>
+                <div id="game-board" class="game-board">
+                    <!-- 5x5 grid will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <button id="ready-btn" class="control-btn ready-btn">Ready to Play</button>
+                <button id="reset-btn" class="control-btn reset-btn">Reset Match</button>
+            </div>
+
+            <!-- Game Messages -->
+            <div id="message-area" class="message-area">
+                <div id="game-message" class="game-message"></div>
+            </div>
+        </div>
+
+        <!-- Winner Modal -->
+        <div id="winner-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2 id="winner-text">Player Wins!</h2>
+                <div id="winner-stats" class="winner-stats"></div>
+                <button id="next-game-btn" class="control-btn">Next Game</button>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div id="error-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Error</h3>
+                <p id="error-message">Something went wrong</p>
+                <button id="error-ok-btn" class="control-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
