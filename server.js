@@ -37,25 +37,6 @@ app.use(express.static('public'));
 
 const matchManager = new MatchManager(io);
 
-app.get('/:secretKey/:matchId/:playerName', (req, res) => {
-    const { secretKey, matchId, playerName } = req.params;
-    
-    debugLog(5, `Game access attempt`, { secretKey, matchId, playerName, ip: req.ip });
-    
-    if (!SECRET_KEYS.includes(secretKey)) {
-        debugLog(5, `Invalid secret key access denied`, { secretKey, ip: req.ip });
-        return res.status(403).send('Invalid secret key');
-    }
-    
-    if (!matchId || !playerName) {
-        debugLog(5, `Missing parameters in game access`, { secretKey, matchId, playerName, ip: req.ip });
-        return res.status(400).send('Missing match ID or player name');
-    }
-    
-    debugLog(6, `Game access granted`, { secretKey, matchId, playerName, ip: req.ip });
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
@@ -73,6 +54,32 @@ app.get('/api/match/:secretKey/:matchId/stats', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Failed to retrieve match stats' });
     }
+});
+
+app.get('/play/:secretKey/:matchId/:playerName', (req, res) => {
+    const { secretKey, matchId, playerName } = req.params;
+    
+    // Skip if this looks like a static file request
+    if (playerName.includes('.')) {
+        debugLog(5, `Static file request - skipping game route`, { secretKey, matchId, playerName, ip: req.ip });
+        return res.status(404).send('File not found');
+    }
+    
+    debugLog(5, `Game access attempt`, { secretKey, matchId, playerName, ip: req.ip });
+    
+    if (!SECRET_KEYS.includes(secretKey)) {
+        debugLog(5, `Invalid secret key access denied`, { secretKey, ip: req.ip });
+        return res.status(403).send('Invalid secret key');
+    }
+    
+
+    if (!matchId || !playerName) {
+        debugLog(5, `Missing parameters in game access`, { secretKey, matchId, playerName, ip: req.ip });
+        return res.status(400).send('Missing match ID or player name');
+    }
+    
+    debugLog(6, `Game access granted`, { secretKey, matchId, playerName, ip: req.ip });
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 io.on('connection', (socket) => {

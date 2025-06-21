@@ -165,7 +165,8 @@ body {
     background: #333;
     padding: 3px;
     border-radius: 8px;
-    flex-grow: 1;
+    width: 300px;
+    height: 300px;
 }
 
 .game-tile {
@@ -348,6 +349,8 @@ body {
     
     .game-board {
         max-width: 250px;
+        width: 250px;
+        height: 250px;
     }
     
     .control-btn {
