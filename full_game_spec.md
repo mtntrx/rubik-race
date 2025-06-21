@@ -70,11 +70,12 @@ A real-time, competitive two-player sliding puzzle game based on the physical Ru
 - **Connection Status**: Indicator for opponent connection
 
 ### 3.3 Visual Design
-- **Tile Colors**: High contrast, colorblind-friendly palette
+- **Tile Colors**: Primary and secondary colors (pure red #ff0000, blue #0000ff, green #00ff00, yellow #ffff00, orange #ff8000, white #ffffff)
 - **Touch Targets**: Minimum 44px for mobile accessibility
 - **Animations**: Smooth tile sliding transitions (200ms)
 - **Responsive**: Auto-scale for different screen sizes
-- **Visual Feedback**: Do not highlight valid moves, winner celebration
+- **Visual Feedback**: Clean tiles without borders, winner celebration
+- **Game Board**: Fixed 5x5 grid with square tiles (300px x 300px on desktop, 250px x 250px on mobile)
 
 ## 4. Server Architecture
 
@@ -289,16 +290,30 @@ Win detected → Server announces winner → Update match stats
 - [ ] Visual feedback and animations
 
 ### Phase 4: Integration & Testing
-- [ ] End-to-end game flow testing
-- [ ] Multi-device testing
-- [ ] Performance optimization
-- [ ] Error handling and recovery
+- [x] End-to-end game flow testing
+- [x] Multi-device testing
+- [x] Performance optimization
+- [x] Error handling and recovery
 
 ### Phase 5: Polish & Deployment
-- [ ] UI/UX improvements
-- [ ] Cross-browser compatibility
+- [x] UI/UX improvements (Fixed game board layout and tile colors)
+- [x] Cross-browser compatibility (Fixed static file paths)
 - [ ] Production deployment setup
 - [ ] Performance monitoring
+
+## Recent Updates (June 2025)
+
+### Visual Improvements Completed
+- **Fixed Game Board Layout**: Resolved issue where 5x5 puzzle was rendering as vertical strip instead of proper grid
+- **Updated Tile Colors**: Changed to pure primary/secondary colors for better visual clarity
+- **Removed Tile Borders**: Eliminated distracting yellow/gold borders from valid moves and red borders from center tiles
+- **Static File Loading**: Fixed relative path issues causing CSS/JS files to 404 when accessed via game URLs
+
+### Technical Fixes
+- **CSS Grid Layout**: Set explicit dimensions (300px x 300px desktop, 250px x 250px mobile) to prevent flex-grow distortion
+- **Static Middleware**: Confirmed proper Express static file serving from /public directory
+- **Independent Player Boards**: Verified move handling logic correctly isolates player board updates
+- **Debugging**: Added console logging to track move updates and player board independence
 
 ## 11. Technical Requirements
 
