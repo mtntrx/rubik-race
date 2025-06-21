@@ -190,6 +190,9 @@ class MatchManager {
                 board: newBoard
             };
 
+            console.log(`[MOVE DEBUG] Sending move-update for player: ${playerName}, socketId: ${socket.id}, matchId: ${matchId}`);
+            console.log(`[MOVE DEBUG] Move data:`, JSON.stringify(moveUpdate, null, 2));
+
             await updateGame(matchState.currentGame.id, {
                 [`${playerName === (await getMatch(matchId)).player1_name ? 'player1' : 'player2'}_moves`]: playerState.moves
             });

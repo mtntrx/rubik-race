@@ -23,12 +23,18 @@ class RubikRaceClient {
 
     initializeFromURL() {
         const pathParts = window.location.pathname.split('/').filter(part => part);
-        if (pathParts.length >= 3) {
+        if (pathParts.length >= 4 && pathParts[0] === 'play') {
+            // URL format: /play/secretKey/matchId/playerName
+            this.gameState.secretKey = pathParts[1];
+            this.gameState.matchId = pathParts[2];
+            this.gameState.playerName = pathParts[3];
+        } else if (pathParts.length >= 3) {
+            // URL format: /secretKey/matchId/playerName  
             this.gameState.secretKey = pathParts[0];
             this.gameState.matchId = pathParts[1];
             this.gameState.playerName = pathParts[2];
         } else {
-            this.showError('Invalid URL format. Expected: /secretKey/matchId/playerName');
+            this.showError('Invalid URL format. Expected: /play/secretKey/matchId/playerName or /secretKey/matchId/playerName');
         }
     }
 
