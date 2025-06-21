@@ -74,7 +74,7 @@ A real-time, competitive two-player sliding puzzle game based on the physical Ru
 - **Touch Targets**: Minimum 44px for mobile accessibility
 - **Animations**: Smooth tile sliding transitions (200ms)
 - **Responsive**: Auto-scale for different screen sizes
-- **Visual Feedback**: Highlight valid moves, winner celebration
+- **Visual Feedback**: Do not highlight valid moves, winner celebration
 
 ## 4. Server Architecture
 

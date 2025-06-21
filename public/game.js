@@ -159,11 +159,14 @@ class RubikRaceClient {
     }
 
     handleMoveUpdate(data) {
+        console.log(`Move update received: ${data.playerName} made a move, I am ${this.gameState.playerName}`);
         if (data.playerName === this.gameState.playerName) {
+            console.log('Updating MY board');
             this.gameState.moves = data.moves;
             this.gameState.board = [...data.board];
             this.renderBoard();
         } else {
+            console.log('Updating opponent move count only');
             this.gameState.opponentMoves = data.moves;
         }
         this.updateMoveCounters();

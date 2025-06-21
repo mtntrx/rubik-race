@@ -187,8 +187,8 @@ body {
 }
 
 .game-tile.valid-move {
-    border-color: #ffd700;
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+    border-color: transparent;
+    box-shadow: none;
 }
 
 .game-tile.empty {
@@ -197,17 +197,17 @@ body {
 }
 
 .game-tile.center {
-    border-color: #ff6b6b;
-    border-width: 3px;
+    border-color: transparent;
+    border-width: 2px;
 }
 
 /* Color Classes */
-.red { background: #ff6b6b; }
-.blue { background: #4ecdc4; }
-.green { background: #45b7d1; }
-.yellow { background: #f9ca24; }
-.orange { background: #f0932b; }
-.white { background: #ecf0f1; }
+.red { background: #ff0000; }
+.blue { background: #0000ff; }
+.green { background: #00ff00; }
+.yellow { background: #ffff00; }
+.orange { background: #ff8000; }
+.white { background: #ffffff; border: 1px solid #ccc; }
 
 /* Control Panel */
 .control-panel {
