@@ -349,7 +349,7 @@ class RubikRaceClient {
                     element.style.transform = '';
                 });
                 resolve();
-            }, 200); // Match CSS transition duration
+            }, 50); // Match CSS transition duration
         });
     }
 
