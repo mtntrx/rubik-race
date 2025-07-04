@@ -193,8 +193,9 @@ body {
 }
 
 .game-tile.empty {
-    background: #333 !important;
+    background: #F0F !important;
     cursor: default;
+    opacity: 0;
 }
 
 .game-tile.center {
