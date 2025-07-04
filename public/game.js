@@ -411,10 +411,6 @@ class RubikRaceClient {
     showMessage(message) {
         const messageElement = document.getElementById('game-message');
         messageElement.textContent = message;
-        
-        setTimeout(() => {
-            messageElement.textContent = '';
-        }, 3000);
     }
 
     showWinnerModal(winner, isWinner, gameStats) {
