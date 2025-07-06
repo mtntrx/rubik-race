@@ -20,6 +20,9 @@ class RubikRaceClient {
         this.bindEvents();
         this.connectToServer();
         this.boardDrawnOnce = false;
+        
+        // Show inactive boards initially
+        this.renderInactiveBoards();
 
         // setInterval(() => {
         //     let randomIndex = Math.floor(Math.random() * 25);
@@ -128,17 +131,13 @@ class RubikRaceClient {
             this.hideWinnerModal();
             this.gameState.ready = false;
             this.updateReadyButton();
+            this.renderInactiveBoards();
         });
 
         document.getElementById('error-ok-btn').addEventListener('click', () => {
             this.hideError();
         });
 
-        // document.addEventListener('touchstart', (e) => {
-        //     if (e.target.classList.contains('game-tile')) {
-        //         e.preventDefault();
-        //     }
-        // }, { passive: false });
     }
 
     toggleReady() {
@@ -166,6 +165,8 @@ class RubikRaceClient {
         this.gameState.scrambler = [...data.scrambler];
         this.gameState.moves = 0;
         
+        // Clear boards and render active game
+        //this.clearBoard();
         this.updateMatchInfo(data.match);
         this.renderScrambler();
         this.renderBoardStatic();
@@ -200,6 +201,9 @@ class RubikRaceClient {
         } else {
             this.showMessage(`${data.winner} won this round!`);
         }
+        
+        // Show inactive boards after game ends
+        this.renderInactiveBoards();
     }
 
     handleMatchReset(data) {
@@ -211,6 +215,7 @@ class RubikRaceClient {
         this.updateMatchInfo(data.match);
         this.updateReadyButton();
         this.clearBoard();
+        this.renderInactiveBoards();
         this.showMessage('Match reset! Ready for a new game?');
     }
 
@@ -243,6 +248,36 @@ class RubikRaceClient {
         });
     }
 
+    renderInactiveBoards() {
+        this.renderInactiveScrambler();
+        this.renderInactiveBoard();
+    }
+
+    renderInactiveScrambler() {
+        const scramblerGrid = document.getElementById('scrambler-grid');
+        scramblerGrid.innerHTML = '';
+        for (let i = 0; i < 9; i++) {
+            const tile = document.createElement('div');
+            tile.className = `scrambler-tile grey`;
+            scramblerGrid.appendChild(tile);
+        }
+    }
+
+    renderInactiveBoard() {
+        const gameBoard = document.getElementById('game-board');
+        gameBoard.innerHTML = '';
+        for (let i = 0; i < 25; i++) {
+            const tile = document.createElement('div');
+            if (i === 24) {
+                tile.className = 'game-tile empty';
+            } else {
+                tile.className = `game-tile grey inactive`;
+            }
+            tile.dataset.position = i;
+            gameBoard.appendChild(tile);
+        }
+    }
+
     renderBoard(previousBoard = null) {
         const gameBoard = document.getElementById('game-board');
         this.renderBoardStatic();
@@ -270,7 +305,7 @@ class RubikRaceClient {
             } else {
                 gameBoard.appendChild(tileElement);
             }
-            console.log('BOARD RENDERED ----------------------------------Board rendered with static tiles');
+
         });
     }
 
@@ -285,6 +320,10 @@ class RubikRaceClient {
         const scramblerGrid = document.getElementById('scrambler-grid');
         gameBoard.innerHTML = '';
         scramblerGrid.innerHTML = '';
+        
+        // Clear game state arrays
+        // this.gameState.board = [];
+        // this.gameState.scrambler = [];
     }
 
     updateMatchInfo(match) {

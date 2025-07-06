@@ -208,6 +208,7 @@ body {
 .yellow { background: #ffff00; }
 .orange { background: #ff8000; }
 .white { background: #ffffff; border: 1px solid #ccc; }
+.grey { background: #999999; }
 
 /* Control Panel */
 .control-panel {
