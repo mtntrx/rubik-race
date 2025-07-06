@@ -355,8 +355,8 @@ class RubikRaceClient {
     }
 
     updateMoveCounters() {
-        document.getElementById('player1-moves').textContent = `P1: ${this.gameState.moves} moves`;
-        document.getElementById('player2-moves').textContent = `P2: ${this.gameState.opponentMoves} moves`;
+        // Move counter elements removed from display, but keeping method for future use
+        // Logic still tracks moves in gameState.moves and gameState.opponentMoves
     }
 
     updateReadyButton() {
@@ -380,7 +380,7 @@ class RubikRaceClient {
         
         if (connected) {
             statusIndicator.classList.add('connected');
-            statusText.textContent = 'Connected';
+            statusText.textContent = `Connected --  Match:"${this.gameState.matchId}"`;
         } else {
             statusIndicator.classList.remove('connected');
             statusText.textContent = 'Disconnected';
