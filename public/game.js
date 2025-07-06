@@ -180,8 +180,7 @@ class RubikRaceClient {
             const previousBoard = [...this.gameState.board];
             this.gameState.moves = data.moves;
             this.gameState.board = [...data.board];
-            //this.renderBoard(true, previousBoard);
-            this.renderBoard(false, previousBoard);
+            this.renderBoard(previousBoard); 
         } else {
             console.log('Updating opponent move count only');
             this.gameState.opponentMoves = data.moves;
@@ -244,11 +243,9 @@ class RubikRaceClient {
         });
     }
 
-    renderBoard(animate = false, previousBoard = null) {
+    renderBoard(previousBoard = null) {
         const gameBoard = document.getElementById('game-board');
-        
         this.renderBoardStatic();
-        
     }
     
     renderBoardStatic() {
@@ -277,78 +274,6 @@ class RubikRaceClient {
         });
     }
 
-    
-    async animateTileMovement(oldBoard, newBoard) {
-        const gameBoard = document.getElementById('game-board');
-        const tiles = Array.from(gameBoard.children);
-        
-        // Find empty position in old and new boards
-        const oldEmptyIndex = oldBoard.indexOf('empty');
-        const newEmptyIndex = newBoard.indexOf('empty');
-        
-        // Calculate movement direction
-        const oldRow = Math.floor(oldEmptyIndex / 5);
-        const oldCol = oldEmptyIndex % 5;
-        const newRow = Math.floor(newEmptyIndex / 5);
-        const newCol = newEmptyIndex % 5;
-        
-        // Determine which tiles need to slide
-        const tilesToAnimate = [];
-        
-        if (oldRow === newRow) {
-            // Horizontal movement
-            const startCol = Math.min(oldCol, newCol);
-            const endCol = Math.max(oldCol, newCol);
-            const direction = newCol > oldCol ? -1 : 1; // -1 = slide left, 1 = slide right
-            
-            for (let col = startCol; col <= endCol; col++) {
-                const index = oldRow * 5 + col;
-                if (index !== oldEmptyIndex) {
-                    tilesToAnimate.push({
-                        element: tiles[index],
-                        direction: 'horizontal',
-                        offset: direction * 100 // 100% of tile width
-                    });
-                }
-            }
-        } else if (oldCol === newCol) {
-            // Vertical movement
-            const startRow = Math.min(oldRow, newRow);
-            const endRow = Math.max(oldRow, newRow);
-            const direction = newRow > oldRow ? -1 : 1; // -1 = slide up, 1 = slide down
-            
-            for (let row = startRow; row <= endRow; row++) {
-                const index = row * 5 + oldCol;
-                if (index !== oldEmptyIndex) {
-                    tilesToAnimate.push({
-                        element: tiles[index],
-                        direction: 'vertical',
-                        offset: direction * 100 // 100% of tile height
-                    });
-                }
-            }
-        }
-        
-        // Apply animations
-        tilesToAnimate.forEach(({ element, direction, offset }) => {
-            if (direction === 'horizontal') {
-                element.style.transform = `translateX(${offset}%)`;
-            } else {
-                element.style.transform = `translateY(${offset}%)`;
-            }
-        });
-        
-        // Wait for animation to complete
-        return new Promise(resolve => {
-            setTimeout(() => {
-                // Reset transforms
-                tilesToAnimate.forEach(({ element }) => {
-                    element.style.transform = '';
-                });
-                resolve();
-            }, 50); // Match CSS transition duration
-        });
-    }
 
     isCenterTile(index) {
         const centerPositions = [6, 7, 8, 11, 12, 13, 16, 17, 18];
