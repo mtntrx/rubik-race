@@ -137,14 +137,30 @@ io.on('connection', (socket) => {
     });
 });
 
+getRandomMatchName = () => {
+    // random name will be 4 lowercase letters
+    // it will be a  consonant, vowel, consonant, vowel
+    const constonants = 'bcdfghjklmnpqrstvwxz';
+    const vowels = 'aeiou';
+    let randomName = '';
+    randomName += constonants[Math.floor(Math.random() * constonants.length)];
+    randomName += vowels[Math.floor(Math.random() * vowels.length)];
+    randomName += constonants[Math.floor(Math.random() * constonants.length)];
+    randomName += vowels[Math.floor(Math.random() * vowels.length)];
+    return randomName;
+}
+
 async function startServer() {
     try {
         await initializeDatabase();
         console.log('Database initialized');
         
         server.listen(PORT, () => {
+            tmpMatchName = getRandomMatchName();
             console.log(`Rubik's Race server running on port ${PORT}`);
-            console.log(`Access game at: http://localhost:${PORT}/abc123/match-001/player1`);
+            console.log(`Access game at:`);
+            console.log(`http://localhost:${PORT}/play/${SECRET_KEYS[0]}/${tmpMatchName}/p1`);
+            console.log(`http://localhost:${PORT}/play/${SECRET_KEYS[0]}/${tmpMatchName}/p2`);
             debugLog(5, `Server started successfully`, { port: PORT, debugLevel: DEBUG_LEVEL });
             if (DEBUG_LEVEL >= 5) {
                 console.log(`DEBUG_LEVEL is set to ${DEBUG_LEVEL} - Enhanced logging enabled`);
