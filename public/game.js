@@ -369,7 +369,7 @@ class RubikRaceClient {
             readyBtn.textContent = 'Ready! Waiting...';
             readyBtn.disabled = true;
         } else {
-            readyBtn.textContent = 'Ready to Play';
+            readyBtn.textContent = 'Ready to Play?';
             readyBtn.disabled = false;
         }
     }
