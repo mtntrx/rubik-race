@@ -19,6 +19,15 @@ class RubikRaceClient {
         this.initializeFromURL();
         this.bindEvents();
         this.connectToServer();
+        this.boardDrawnOnce = false;
+
+        // setInterval(() => {
+        //     let randomIndex = Math.floor(Math.random() * 25);
+        //     while (  this.isValidMove(randomIndex) === false ) {
+        //         randomIndex = Math.floor(Math.random() * 25);
+        //     }
+        //     this.makeMove(randomIndex);
+        // }, 5000);
     }
 
     initializeFromURL() {
@@ -125,11 +134,11 @@ class RubikRaceClient {
             this.hideError();
         });
 
-        document.addEventListener('touchstart', (e) => {
-            if (e.target.classList.contains('game-tile')) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // document.addEventListener('touchstart', (e) => {
+        //     if (e.target.classList.contains('game-tile')) {
+        //         e.preventDefault();
+        //     }
+        // }, { passive: false });
     }
 
     toggleReady() {
@@ -171,7 +180,8 @@ class RubikRaceClient {
             const previousBoard = [...this.gameState.board];
             this.gameState.moves = data.moves;
             this.gameState.board = [...data.board];
-            this.renderBoard(true, previousBoard);
+            //this.renderBoard(true, previousBoard);
+            this.renderBoard(false, previousBoard);
         } else {
             console.log('Updating opponent move count only');
             this.gameState.opponentMoves = data.moves;
@@ -237,49 +247,36 @@ class RubikRaceClient {
     renderBoard(animate = false, previousBoard = null) {
         const gameBoard = document.getElementById('game-board');
         
-        if (!animate || !previousBoard) {
-            // Initial render or no animation needed
-            this.renderBoardStatic();
-            return;
-        }
+        this.renderBoardStatic();
         
-        // Calculate which tiles moved and animate them
-        this.animateTileMovement(previousBoard, this.gameState.board).then(() => {
-            // After animation completes, do a static render to ensure everything is correct
-            this.renderBoardStatic();
-        });
     }
     
     renderBoardStatic() {
         const gameBoard = document.getElementById('game-board');
-        gameBoard.innerHTML = '';
-        
+        const existingTiles = Array.from(gameBoard.children);
+
         this.gameState.board.forEach((tile, index) => {
             const tileElement = document.createElement('div');
             tileElement.className = `game-tile ${tile}`;
             tileElement.dataset.position = index;
-            
+
             if (tile === 'empty') {
                 tileElement.classList.add('empty');
-            } else {
+            } else if ( this.isValidMove(index) ) {
                 tileElement.addEventListener('click', () => this.makeMove(index));
-                tileElement.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    this.makeMove(index);
-                });
-                
-                if (this.gameState.gameInProgress && this.isValidMove(index)) {
-                    tileElement.classList.add('valid-move');
-                }
+            } 
+
+            const existingTile = existingTiles.find( (el) => parseInt(el.dataset.position, 10) === index);
+
+            if (existingTile) {
+                gameBoard.replaceChild(tileElement, existingTile);
+            } else {
+                gameBoard.appendChild(tileElement);
             }
-            
-            if (this.isCenterTile(index)) {
-                tileElement.classList.add('center');
-            }
-            
-            gameBoard.appendChild(tileElement);
+            console.log('BOARD RENDERED ----------------------------------Board rendered with static tiles');
         });
     }
+
     
     async animateTileMovement(oldBoard, newBoard) {
         const gameBoard = document.getElementById('game-board');
@@ -452,8 +449,9 @@ class RubikRaceClient {
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('game-container').classList.remove('hidden');
     }
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new RubikRaceClient();
+    const client = new RubikRaceClient();
 });

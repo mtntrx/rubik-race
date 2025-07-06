@@ -53,6 +53,7 @@ body {
     padding: 10px;
     max-width: 600px;
     margin: 0 auto;
+    z-index: 1;
 }
 
 /* Status Bar */
@@ -157,7 +158,10 @@ body {
 
 .game-board {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    /* grid-template-columns: repeat(5, 1fr); */
+    grid-template-columns: repeat(5, calc(20% - 2.4px));
+    grid-template-rows: repeat(5, calc(20% - 2.4px));
+
     gap: 3px;
     max-width: 300px;
     margin: 0 auto;
@@ -166,6 +170,7 @@ body {
     border-radius: 8px;
     width: 300px;
     height: 300px;
+    z-index: 10;
 }
 
 .game-tile {
@@ -173,33 +178,31 @@ body {
     border-radius: 4px;
     border: 2px solid transparent;
     cursor: pointer;
-    transition: transform 0.05s ease;
+    /* transition: transform 0.05s ease; */
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
     font-size: 12px;
     position: relative;
+    z-index: 1000 !important;
 }
 
 .game-tile:active {
-    transform: scale(0.95);
-}
-
-.game-tile.valid-move {
-    border-color: transparent;
-    box-shadow: none;
+    /* transform: scale(0.95); */
+    cursor: pointer; /* throw away item */
 }
 
 .game-tile.empty {
-    background: #F0F !important;
     cursor: default;
     opacity: 0;
+    z-index: -1;
 }
 
 .game-tile.center {
     border-color: transparent;
     border-width: 2px;
+    z-index: 1000;
 }
 
 /* Color Classes */
@@ -233,6 +236,7 @@ body {
 .ready-btn {
     background: #2ecc71;
     color: white;
+    z-index: 100;
 }
 
 .ready-btn:hover {
@@ -247,6 +251,7 @@ body {
 .reset-btn {
     background: #e74c3c;
     color: white;
+    z-index: 100;
 }
 
 .reset-btn:hover {
@@ -263,6 +268,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 100;
 }
 
 .game-message {
@@ -273,6 +279,7 @@ body {
     padding: 10px 20px;
     border-radius: 20px;
     font-size: 14px;
+    z-index: 100;
 }
 
 /* Modal */
@@ -286,7 +293,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 10000;
 }
 
 .modal-content {
