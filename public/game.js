@@ -100,6 +100,11 @@ class RubikRaceClient {
             this.handleMatchReset(data);
         });
 
+        this.socket.on('game-reset-reconnection', (data) => {
+            console.log('Game reset due to reconnection:', data);
+            this.handleGameResetReconnection(data);
+        });
+
         this.socket.on('player-disconnected', (data) => {
             this.showMessage(`${data.playerName} disconnected`);
         });
@@ -217,6 +222,19 @@ class RubikRaceClient {
         this.clearBoard();
         this.renderInactiveBoards();
         this.showMessage('Match reset! Ready for a new game?');
+    }
+
+    handleGameResetReconnection(data) {
+        this.gameState.gameInProgress = false;
+        this.gameState.ready = false;
+        this.gameState.moves = 0;
+        this.gameState.opponentMoves = 0;
+        
+        this.updateMatchInfo(data.match);
+        this.updateReadyButton();
+        this.clearBoard();
+        this.renderInactiveBoards();
+        this.showMessage(data.message);
     }
 
     makeMove(tileIndex) {

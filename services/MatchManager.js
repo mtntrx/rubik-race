@@ -47,6 +47,11 @@ class MatchManager {
             }
         }
 
+        // Check if this is a reconnection to an active game
+        const matchState = this.activeMatches.get(matchId);
+        const isReconnectionToActiveGame = matchState && matchState.gameInProgress && 
+            (match.player1_name === playerName || match.player2_name === playerName);
+
         await createPlayerSession(socket.id, matchId, playerName);
         
         this.playerSockets.set(socket.id, {
@@ -81,6 +86,11 @@ class MatchManager {
                 playerStates: new Map(),
                 gameInProgress: false
             });
+        }
+
+        // If reconnecting to active game, reset the game
+        if (isReconnectionToActiveGame) {
+            await this.handleReconnectionGameReset(matchId, playerName);
         }
     }
 
@@ -237,6 +247,36 @@ class MatchManager {
             winner: winnerName,
             match: updatedMatch,
             gameStats: matchState.currentGame?.playerStates || new Map()
+        });
+    }
+
+    async handleReconnectionGameReset(matchId, reconnectingPlayerName) {
+        const matchState = this.activeMatches.get(matchId);
+        if (!matchState) {
+            return;
+        }
+
+        // Reset the game state
+        matchState.gameInProgress = false;
+        matchState.currentGame = null;
+        matchState.playerStates.clear();
+
+        // Update match status to waiting
+        await updateMatch(matchId, {
+            status: 'waiting',
+            current_game_id: null
+        });
+
+        // Reset all player ready states
+        Array.from(this.playerSockets.values())
+            .filter(p => p.matchId === matchId)
+            .forEach(p => p.ready = false);
+
+        // Notify all players about the game reset
+        this.io.to(matchId).emit('game-reset-reconnection', {
+            message: `Game reset - ${reconnectingPlayerName} reconnected`,
+            reconnectingPlayer: reconnectingPlayerName,
+            match: await getMatch(matchId)
         });
     }
 
